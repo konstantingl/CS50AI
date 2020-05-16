@@ -114,8 +114,8 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    print (corpus)
     pageranks = dict()
+    pageranks_new = dict()
     deltas = dict()
 
     for page in corpus.keys():
@@ -127,29 +127,25 @@ def iterate_pagerank(corpus, damping_factor):
             for i,j in corpus.items():
                 if page in j:
                     keys.append(i)
-            print ('Pages lead to %s: %s' % (page, keys))
 
             proba = 0
             for key in keys:
                 proba_page = pageranks[key] / len(corpus[key])
                 proba += proba_page
-                print(f"  Current proba: {proba:.4f}")
 
             new_proba = ((1 - damping_factor) / len(corpus)) + damping_factor * proba
 
-            print(f"  New proba: {new_proba:.4f}")
-            print(f"  Old proba: {pageranks[page]:.4f}")
             delta = new_proba - pageranks[page]
-            print(f"  Delta: {delta:.4f}")
 
-            pageranks[page] = new_proba
-
-            print (pageranks)
+            pageranks_new[page] = new_proba
 
             deltas[page] = delta
-            print (deltas)
             if all(-0.001 < i < 0.001 for i in deltas.values()):
                 return pageranks
+
+        pageranks = pageranks_new.copy()
+
+
 
 
 
